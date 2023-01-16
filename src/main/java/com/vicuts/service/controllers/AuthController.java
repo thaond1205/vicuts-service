@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.vicuts.service.common.Contant;
 import com.vicuts.service.models.ERole;
 import com.vicuts.service.models.Role;
 import com.vicuts.service.models.User;
@@ -35,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping(Contant.ROOT_PATH_AUTH)
 public class AuthController {
   @Autowired
   AuthenticationManager authenticationManager;
@@ -57,19 +58,18 @@ public class AuthController {
 
     Authentication authentication = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
     SecurityContextHolder.getContext().setAuthentication(authentication);
     String jwt = jwtUtils.generateJwtToken(authentication);
-    
+
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
     List<String> roles = userDetails.getAuthorities().stream()
         .map(item -> item.getAuthority())
         .collect(Collectors.toList());
 
     return ResponseEntity.ok(new JwtResponse(jwt,
-                         userDetails.getId(), 
-                         userDetails.getUsername(), 
-                         userDetails.getEmail(), 
+                         userDetails.getId(),
+                         userDetails.getUsername(),
+                         userDetails.getEmail(),
                          roles));
   }
 
