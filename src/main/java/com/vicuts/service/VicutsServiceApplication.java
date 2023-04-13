@@ -8,6 +8,7 @@ public class VicutsServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(VicutsServiceApplication.class, args);
+        System.out.println("thao cicd")
     }
 
 }
